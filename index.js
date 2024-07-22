@@ -2,7 +2,8 @@ const express = require("express")
 const jwt = require("jsonwebtoken")
 const app = express()
 const mysql = require('mysql2');
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const cors = require("cors")
 // bcrypt.genSalt(10, function(err, salt) {
 //     bcrypt.hash("mohib302", salt, function(err, hash) {
@@ -12,17 +13,20 @@ const cors = require("cors")
 
 app.use(express.json());
 app.use(cors("*"))
-const connection =  mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: "",
-    database: 'homepageApp',
-  });
+const connection = mysql.createConnection({
+  host: '192.168.123.186',
+  port: 3306,
+  user: 'homepageuser',
+  password: "homepageuser@123",
+  database: 'homepageapp',
+});
 
-app.get("/", (req,res) => {
-
-    return res.send("ok");
+app.get("/", (req, res) => {
+  console.log('Backend server is running');
+  return res.send("ok");
 })
+
+
 app.post("/auth",(req,res) => {
     let {email, password} = req.body
     if(!email || !password) return res.send( "Email & Password are Required");
@@ -41,20 +45,23 @@ app.post("/auth",(req,res) => {
         }
       );
 });
-app.post("/addinguser",function(req,res){
+
+
+
+app.post("/addinguser", function (req, res) {
   if (!req.body.email || !req.body.password) {
     return res.status(400).send('email, and password are required.');
   }
   const q2 = `INSERT INTO added (email,password) VALUES ('${req.body.email}', '${req.body.password}')`;
   connection.query(
     q2,
-    function (err, results){
-    if (err) {
-      console.error('Error adding user:', err);
-      return res.status(500).send('Error adding user.');s
-    }
-    res.status(201).send('User added successfully!');
-  })
+    function (err, results) {
+      if (err) {
+        console.error('Error adding user:', err);
+        return res.status(500).send('Error adding user.'); s
+      }
+      res.status(201).send('User added successfully!');
+    })
 });
 
 
