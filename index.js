@@ -167,9 +167,9 @@ app.put("/update/:id", function (req, res) {
   const newEmail = req.body.email;
   const newPassword = req.body.password;
   const newUsername = req.body.username;
-  const newRole = req.body.Role;
+  const newRole = req.body.role;
 
-  console.log('newPassword: ', newPassword);
+  // console.log('Updating user ', req.body);
 
   // Hash the new password
   bcrypt.hash(newPassword, 10, function (err, hashedPassword) {
